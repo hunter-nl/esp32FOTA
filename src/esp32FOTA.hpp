@@ -43,31 +43,30 @@ extern "C" {
 #include <ArduinoJson.h>
 #include <FS.h>
 
-// inherit includes from sketch, detect SPIFFS first for legacy support
-#if __has_include(<SPIFFS.h>) || defined _SPIFFS_H_
-  #pragma message "Using SPIFFS for certificate validation"
-  #include <SPIFFS.h>
-  #define FOTA_FS &SPIFFS
-#elif __has_include(<LittleFS.h>) || defined _LiffleFS_H_
-  #pragma message "Using LittleFS for certificate validation"
+#if __has_include(<LittleFS.h>) || defined _LittleFS_H_
+  //#pragma message "Using LittleFS for certificate validation"
   #include <LittleFS.h>
   #define FOTA_FS &LittleFS
+#elif __has_include(<SPIFFS.h>) || defined _SPIFFS_H_
+  //#pragma message "Using SPIFFS for certificate validation"
+  #include <SPIFFS.h>
+  #define FOTA_FS &SPIFFS
 #elif __has_include(<SD.h>) || defined _SD_H_
-  #pragma message "Using SD for certificate validation"
+  //#pragma message "Using SD for certificate validation"
   #include <SD.h>
   #define FOTA_FS &SD
 #elif __has_include(<SD_MMC.h>) || defined _SD_MMC_H_
-  #pragma message "Using SD_MMC for certificate validation"
+  //#pragma message "Using SD_MMC for certificate validation"
   #include <SD_MMC.h>
   #define FOTA_FS &SD_MMC
 #elif defined _LIFFLEFS_H_ // older externally linked, hard to identify and unsupported versions of SPIFFS
   #pragma message "this version of LittleFS is unsupported, use #include <LittleFS.h> instead, if using platformio add LittleFS(esp32)@^2.0.0 to lib_deps"
 #elif __has_include(<PSRamFS.h>) || defined _PSRAMFS_H_
-  #pragma message "Using PSRamFS for certificate validation"
+  //#pragma message "Using PSRamFS for certificate validation"
   #include <PSRamFS.h>
   #define FOTA_FS &PSRamFS
 #else
-  // #pragma message "No filesystem provided, certificate validation will be unavailable (hint: include SD, SPIFFS or LittleFS before including this library)"
+  #pragma message "No filesystem provided, certificate validation will be unavailable (hint: include SD, SPIFFS or LittleFS before including this library)"
   #define FOTA_FS nullptr
 #endif
 
