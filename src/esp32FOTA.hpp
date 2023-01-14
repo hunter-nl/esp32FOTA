@@ -132,7 +132,7 @@ extern "C" {
   #define F_writeStream() F_Update.writeStream(*_stream);
 #endif
 
-
+extern String updateFwType;
 
 struct SemverClass
 {
