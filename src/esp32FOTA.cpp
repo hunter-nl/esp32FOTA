@@ -42,6 +42,7 @@
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 
+String updateFwType = "-Unknown-";
 
 static int64_t getHTTPStream( esp32FOTA* fota, int partition );
 static int64_t getFileStream( esp32FOTA* fota, int partition );
@@ -510,8 +511,10 @@ bool esp32FOTA::execOTA( int partition, bool restart_after )
         log_e("No firmware URL, aborting");
         return false; // app partition is mandatory
     }
-
-    // call getHTTPStream
+   
+    updateFwType = partition==U_FLASH?"Firmware":"Filesystem";
+   
+   // call getHTTPStream
     int64_t updateSize = getStream( this, partition );
 
     if( updateSize<=0 || _stream == nullptr ) {

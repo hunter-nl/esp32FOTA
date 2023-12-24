@@ -43,19 +43,18 @@ extern "C" {
 #include <ArduinoJson.h>
 #include <FS.h>
 
-// inherit includes from sketch, detect SPIFFS first for legacy support
-#if __has_include(<SPIFFS.h>) || defined _SPIFFS_H_
-  #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
-  #pragma message "Using SPIFFS for certificate validation"
-  #endif
-  #include <SPIFFS.h>
-  #define FOTA_FS &SPIFFS
-#elif __has_include(<LittleFS.h>) || defined _LiffleFS_H_
+#if __has_include(<LittleFS.h>) || defined _LittleFS_H_
   #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
   #pragma message "Using LittleFS for certificate validation"
   #endif
   #include <LittleFS.h>
   #define FOTA_FS &LittleFS
+#elif __has_include(<SPIFFS.h>) || defined _SPIFFS_H_
+  #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
+  #pragma message "Using SPIFFS for certificate validation"
+  #endif
+  #include <SPIFFS.h>
+  #define FOTA_FS &SPIFFS
 #elif __has_include(<SD.h>) || defined _SD_H_
   #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
   #pragma message "Using SD for certificate validation"
@@ -148,6 +147,8 @@ extern "C" {
 #endif
 
 #define FW_SIGNATURE_LENGTH     512
+
+extern String updateFwType;
 
 struct SemverClass
 {
